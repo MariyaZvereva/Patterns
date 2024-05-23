@@ -22,6 +22,7 @@ class DeliveryTest {
     void setup() {
         open("http://localhost:9999");
     }
+
     private String generateDate(long addDays) {
         return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
@@ -36,11 +37,11 @@ class DeliveryTest {
         var secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
         open("http://localhost:9999");
         SelenideElement form = $(".form");
-        form.$("[data-test-id=city] input").setValue("vaidUser.getCity");
-        form.$("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        form.$("[data-test-id=city] input").setValue(validUser.getCity());
+        form.$("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         form.$("[data-test-id=date] input").setValue(firstMeetingDate);
-        form.$("[data-test-id=name] input").setValue("vaidUser.getName");
-        form.$("[data-test-id=phone] input").setValue("vaidUser.getPhone");
+        form.$("[data-test-id=name] input").setValue(validUser.getName());
+        form.$("[data-test-id=phone] input").setValue(validUser.getPhone());
         form.$("[data-test-id=agreement]").click();
         form.$("button.button").click();
         $(".notification__content")
@@ -50,7 +51,7 @@ class DeliveryTest {
         $("[data-test-id=replan-notification] .notification__title")
                 .shouldHave(Condition.exactText("Необходимо подтверждение"))
                 .shouldHave(visible);
-        form.$("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        form.$("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         form.$("[data-test-id=date] input").setValue(secondMeetingDate);
         $("[data-test-id=replan-notification] button").click();
         $(".notification__content")
